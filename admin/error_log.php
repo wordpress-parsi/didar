@@ -1,3 +1,40 @@
+<?php
+/*$ver = didar_api::get_custom_fields();
+var_dump($ver);*/
+global $wpdb;
+$paging = '';
+$rowsa   = $wpdb->get_results( "select * from {$wpdb->prefix}didar_error order by id desc" );
+
+//echo count($rowsa);
+
+
+$hpos_table = $wpdb->prefix . 'wc_orders';
+$hpos_enabled = $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $hpos_table ) ) === $hpos_table;
+
+if ( $hpos_enabled ) {
+    $rows = $wpdb->get_results( "
+        SELECT e.* 
+        FROM {$wpdb->prefix}didar_error e
+        INNER JOIN {$wpdb->prefix}wc_orders o ON e.order_id = o.id
+		LEFT JOIN {$wpdb->prefix}wc_order_meta om ON o.id = om.order_id AND om.meta_key = 'didar_id'
+		WHERE om.meta_id IS NULL
+		ORDER BY e.id DESC;
+    " );
+} else {
+    $rows = $wpdb->get_results( "
+		SELECT e.* 
+		FROM {$wpdb->prefix}didar_error e
+		INNER JOIN {$wpdb->prefix}posts p ON e.order_id = p.ID
+		LEFT JOIN {$wpdb->prefix}postmeta pm ON p.ID = pm.post_id AND pm.meta_key = 'didar_id'
+		WHERE p.post_type = 'shop_order'
+		AND pm.meta_id IS NULL
+		ORDER BY e.id DESC;
+    " );
+}
+
+
+//echo count($rows);
+?>
 <div class="wrap">
 	<h2><?php esc_attr_e('Error log', 'didar'); ?></h2>
 	<style>
@@ -21,17 +58,12 @@
 			</thead>
 			<body>
 				<?php
-				/*$ver = didar_api::get_custom_fields();
-				var_dump($ver);*/
-				global $wpdb;
-				$paging = '';
-				$rows   = $wpdb->get_results( "select * from {$wpdb->prefix}didar_error order by id desc" );
 				if(!empty($rows)){
 					$url = admin_url();
 					$paging = did_paging($rows,20);
 					foreach($rows as $row){
 						?><tr>
-							<td><?php echo $row->order_id; ?></td>
+							<td><a href="<?php echo admin_url("post.php?post=" . $row->order_id ."&action=edit"); ?>"><?php echo $row->order_id; ?></a></td>
 							<td><bdi><?php echo $row->date;?><bdi></td>
 							<td><bdi><?php echo $row->date;?><bdi></td>
 							<td><?php echo $row->path;?></td>

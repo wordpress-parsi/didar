@@ -19,6 +19,8 @@
 	and o.id>%d and NOT EXISTS(select post_id from $wpdb->postmeta where post_id=o.ID and meta_key='didar_id' and meta_value<>'')", $status, $from  ) );
 	}
 
+
+
 	$cnt = empty($cnt)?0:$cnt;
 	?>
 	<input type="button" class="button send_ajax" value="<?php esc_attr_e('Start', 'didar'); ?>"/>

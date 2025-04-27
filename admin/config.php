@@ -1,9 +1,7 @@
 <div class="wrap">
 	<h1><?php esc_attr_e('Didar', 'didar'); ?></h1>
 	<?php
-	//$ver = didar_api::get_custom_fields();
-	//var_dump($ver);
-	//if(isset($_POST['save'])){
+
 	if ( isset( $_POST['save'] ) && wp_verify_nonce( $_POST['didar_settings_nonce'], 'didar_settings' ) ) {
 		$_POST['status']['wc-completed'] = 1;
 		update_option( 'did_option', $_POST );
@@ -76,20 +74,6 @@
 					</select>
 
 					<select id="childSelect" name="kariz"></select>
-					<!--select name="kar iz">
-<option value="">انتخاب</option>
-<?php
-/*if($kariz = didar_api::get_kariz_list()){
-                        $selected = isset($opt['kariz'])?$opt['kariz']:'';
-                        foreach($kariz as $kar){
-                            foreach($kar->Stages as $stage){
-								echo "<option value='$stage->Id' ".($selected==$stage->Id?"selected='selected'":'').">$kar->Title-$stage->Title</option>";	
-							}
-
-                        }
-                    }*/
-?>
-</select-->
 				</td>
 			</tr>
 			<tr>

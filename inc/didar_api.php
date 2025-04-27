@@ -5,18 +5,6 @@ class didar_api{
 
 	private static function send_request($router,$params=[]){
 
-		/*$opt = get_option( 'did_option', [] );
-		$ch  = curl_init("https://app.didar.me/api/$router?apikey={$opt['didar_api']}");
-		curl_setopt( $ch, CURLOPT_POST, 1);
-		curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 0);
-		curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, 0);
-		curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, 0);
-		curl_setopt( $ch, CURLOPT_POSTFIELDS, json_encode($params,JSON_UNESCAPED_UNICODE));
-		curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
-		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-		$resp = curl_exec($ch);
-		return json_decode($resp);*/
-
 		$opt = get_option( 'did_option', [] );
 		$url = "https://app.didar.me/api/$router?apikey={$opt['didar_api']}";
 		$args = array(
@@ -256,13 +244,6 @@ class didar_api{
 		$tax    = empty($order->get_total_tax())?0:($order->get_total_tax()/$order->get_total()*100);
 		$tax    = did_fix_price($tax);
 		$status = empty($opt['status'][$ostat])?0:$opt['status'][$ostat];
-		/*switch($order->get_status()){
-			case 'completed':$status=1;break;
-			case 'cancelled':
-			case 'refunded':
-			case 'failed':$status=2;break;
-			default:$status=0;break;
-		}*/
 		$price= did_fix_price($order->get_total());
 		$soid = (isset($opt['soid']) and $opt['soid']=='on')?" $order_id":'';
 		$owner= '';
@@ -297,7 +278,6 @@ class didar_api{
 			}
 			$args['Fields'] = $fields;
 		}
-		
 		
 		//echo(json_encode(['Deal'=>$args,'DealItems'=>$product]));die;
 		$out = self::create_order(['Deal'=>$args,'DealItems'=>$product]);

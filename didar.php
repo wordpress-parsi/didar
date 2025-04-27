@@ -73,7 +73,6 @@ function did_custom_order_meta_box_callback( $post ){
 ?>
 <div class="order_data_column">
 	<?php 
-//var_dump($opt['status']);
 if(isset( $opt['status']['wc-'.$order->get_status()] )){ ?>
 	<div class="didar_status">
 		<?php
